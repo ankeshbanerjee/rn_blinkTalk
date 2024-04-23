@@ -57,7 +57,7 @@ const getStyles = (theme: ThemeData) =>
       marginBottom: verticalScale(10),
       borderRadius: 10,
       gap: scale(10),
-      shadowColor: ColorAssets.deepGrey,
+      shadowColor: '#000',
       shadowOffset: {
         width: 0,
         height: 2,

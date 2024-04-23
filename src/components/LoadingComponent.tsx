@@ -28,7 +28,7 @@ const getStyles = (theme: ThemeData) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.backgroungColor,
+      // backgroundColor: theme.backgroungColor,
       alignItems: 'center',
       justifyContent: 'center',
     },

@@ -1,4 +1,10 @@
-import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
+import {
+  FlatList,
+  ImageBackground,
+  SafeAreaView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import React, {useContext, useEffect, useMemo, useState} from 'react';
 import SimpleText from '../../components/SimpleText';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
@@ -13,6 +19,7 @@ import {UiState} from '../../utils/apputils';
 import LoadingComponent from '../../components/LoadingComponent';
 import {verticalScale} from 'react-native-size-matters';
 import ChatItem from '../../components/ChatItem';
+import {ImageAssets} from '../../../assets';
 
 type Props = BottomTabScreenProps<BottomNavParamsList, 'HOME'>;
 
@@ -46,20 +53,25 @@ const HomeTab: React.FC<Props> = ({navigation}) => {
       {uiState === 'loading' ? (
         <LoadingComponent />
       ) : (
-        <FlatList
-          data={chats}
-          contentContainerStyle={{
-            paddingBottom: verticalScale(150),
-          }}
-          renderItem={({item, index}) => (
-            <ChatItem
-              chat={item}
-              onPress={function () {
-                navigation.getParent()?.navigate('CHAT', {chat: item});
-              }}
-            />
-          )}
-        />
+        <ImageBackground
+          source={ImageAssets.ChatBg}
+          imageStyle={{opacity: 0.2}}
+          style={{flex: 1}}>
+          <FlatList
+            data={chats}
+            contentContainerStyle={{
+              paddingBottom: verticalScale(150),
+            }}
+            renderItem={({item, index}) => (
+              <ChatItem
+                chat={item}
+                onPress={function () {
+                  navigation.getParent()?.navigate('CHAT', {chat: item});
+                }}
+              />
+            )}
+          />
+        </ImageBackground>
       )}
     </View>
   );
