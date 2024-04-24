@@ -12,6 +12,7 @@ import LoginScreen from '../screens/LoginScreen';
 import HomeScreen from '../screens/MainScreen';
 import ChatScreen from '../screens/ChatScreen';
 import MainScreen from '../screens/MainScreen';
+import ImageView from '../screens/ImageView';
 
 const Stack = createNativeStackNavigator<RootStackParamsList>();
 
@@ -70,6 +71,7 @@ const Router = () => {
           <Stack.Screen name="LOGIN" component={LoginScreen} />
           <Stack.Screen name="MAIN" component={MainScreen} />
           <Stack.Screen name="CHAT" component={ChatScreen} />
+          <Stack.Screen name="IMAGE_VIEW" component={ImageView} />
         </Stack.Navigator>
       </NavigationContainer>
 

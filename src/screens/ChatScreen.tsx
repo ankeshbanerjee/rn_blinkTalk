@@ -152,7 +152,7 @@ const ChatScreen: React.FC<Props> = ({navigation, route}) => {
       </View>
       <ImageBackground
         source={ImageAssets.ChatBg}
-        imageStyle={{opacity: 0.2}}
+        imageStyle={{opacity: 0.15}}
         style={{flex: 1, backgroundColor: theme.backgroungColor}}>
         {uiState === 'loading' ? (
           <LoadingComponent />
@@ -336,7 +336,7 @@ const getStyles = (theme: ThemeData) =>
     },
     dateContainer: {
       alignSelf: 'center',
-      backgroundColor: theme.surfaceVariant,
+      backgroundColor: '#fafafa',
       paddingVertical: moderateScale(6),
       paddingHorizontal: scale(10),
       borderRadius: 6,

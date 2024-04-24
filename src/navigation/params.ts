@@ -7,6 +7,13 @@ export type RootStackParamsList = {
   CHAT: {
     chat: Chat;
   };
+  IMAGE_VIEW: {
+    imageUri?: string;
+    mediaInfo?: {
+      media: string[];
+      currIndex: number;
+    };
+  };
 };
 
 export type BottomNavParamsList = {

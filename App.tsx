@@ -1,23 +1,24 @@
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {ThemeContextProvider} from './src/contexts/theme_context';
-import SimpleText from './src/components/SimpleText';
 import Router from './src/navigation/Router';
 import {UserContextProvider} from './src/contexts/UserContext';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 
 const App = () => {
   return (
     <>
-      <UserContextProvider>
-        <ThemeContextProvider>
-          <Router />
-        </ThemeContextProvider>
-      </UserContextProvider>
+      <GestureHandlerRootView style={{flex: 1}}>
+        <UserContextProvider>
+          <ThemeContextProvider>
+            <BottomSheetModalProvider>
+              <Router />
+            </BottomSheetModalProvider>
+          </ThemeContextProvider>
+        </UserContextProvider>
+      </GestureHandlerRootView>
     </>
   );
 };
 
 export default App;
-
-const styles = StyleSheet.create({});

@@ -12,23 +12,23 @@ import ColorAssets from '../theme/colors';
 const HomeAppBar: React.FC = () => {
   const {theme} = useContext(ThemeContext);
   const {top} = useSafeAreaInsets();
+
   return (
     <View
       style={[
         gs.row,
         {
-          backgroundColor: theme.surfaceVariant,
+          backgroundColor: theme.backgroungColor,
           gap: 8,
           paddingHorizontal: scale(16),
           paddingTop: top + verticalScale(6),
           paddingBottom: verticalScale(10),
-          marginBottom: verticalScale(10),
-          shadowColor: ColorAssets.deepGrey,
+          shadowColor: ColorAssets.black,
           shadowOffset: {
             width: 0,
             height: 2,
           },
-          shadowOpacity: 0.07,
+          shadowOpacity: 0.15,
           shadowRadius: 3.84,
           elevation: 5,
         },

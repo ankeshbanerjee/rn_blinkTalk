@@ -34,7 +34,7 @@ const ChatItem: React.FC<Props> = ({chat, onPress}) => {
         />
       )}
       <SimpleText
-        color={theme.secondaryColor}
+        color={theme.onSecondaryContainer}
         fontWeight="medium"
         size={RFValue(14)}>
         {chat.isGroupChat
@@ -50,11 +50,13 @@ export default ChatItem;
 const getStyles = (theme: ThemeData) =>
   StyleSheet.create({
     container: {
+      borderWidth: 0.5,
+      borderColor: theme.onSurfaceVariant,
       backgroundColor: theme.surfaceVariant,
       paddingVertical: verticalScale(10),
       paddingHorizontal: scale(14),
       marginHorizontal: scale(16),
-      marginBottom: verticalScale(10),
+      marginBottom: verticalScale(12),
       borderRadius: 10,
       gap: scale(10),
       shadowColor: '#000',

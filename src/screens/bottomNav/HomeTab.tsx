@@ -55,11 +55,12 @@ const HomeTab: React.FC<Props> = ({navigation}) => {
       ) : (
         <ImageBackground
           source={ImageAssets.ChatBg}
-          imageStyle={{opacity: 0.2}}
+          imageStyle={{opacity: 0.15}}
           style={{flex: 1}}>
           <FlatList
             data={chats}
             contentContainerStyle={{
+              paddingTop: verticalScale(12),
               paddingBottom: verticalScale(150),
             }}
             renderItem={({item, index}) => (
