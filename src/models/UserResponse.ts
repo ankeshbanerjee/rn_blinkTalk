@@ -4,6 +4,14 @@ export interface UserResponse {
   message: string;
 }
 
+export interface FetchAllUsers {
+  result: {
+    users: User[];
+  };
+  success: boolean;
+  message: string;
+}
+
 export interface Result {
   user: User;
 }

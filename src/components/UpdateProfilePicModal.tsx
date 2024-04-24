@@ -12,9 +12,10 @@ import {UiState, showToast} from '../utils/apputils';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import RippleButton from './ripple_button';
 import ColorAssets from '../theme/colors';
-import {updateProfile, uploadSingleFile} from '../services/user_services';
+import {updateProfile} from '../services/user_services';
 import {launchImageLibrary} from 'react-native-image-picker';
 import LoadingModal from './LoadingModal';
+import {uploadSingleFile} from '../services/upload_service';
 
 interface Props {
   imgUrl: string;

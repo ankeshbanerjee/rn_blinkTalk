@@ -16,7 +16,6 @@ interface Props {
   onPress: () => void;
 }
 const ChatItem: React.FC<Props> = ({chat, onPress}) => {
-  const [title, setTitle] = useState<string>('');
   const {user} = useContext(UserContext);
   const {theme} = useContext(ThemeContext);
   const styles = useMemo(() => getStyles(theme), [theme]);
@@ -35,7 +34,7 @@ const ChatItem: React.FC<Props> = ({chat, onPress}) => {
       )}
       <SimpleText
         color={theme.onSecondaryContainer}
-        fontWeight="medium"
+        fontWeight="regular"
         size={RFValue(14)}>
         {chat.isGroupChat
           ? chat.chatName
@@ -53,12 +52,12 @@ const getStyles = (theme: ThemeData) =>
       borderWidth: 0.5,
       borderColor: theme.onSurfaceVariant,
       backgroundColor: theme.surfaceVariant,
-      paddingVertical: verticalScale(10),
+      paddingVertical: verticalScale(14),
       paddingHorizontal: scale(14),
-      marginHorizontal: scale(16),
-      marginBottom: verticalScale(12),
+      marginHorizontal: scale(12),
+      marginBottom: verticalScale(10),
       borderRadius: 10,
-      gap: scale(10),
+      gap: scale(14),
       shadowColor: '#000',
       shadowOffset: {
         width: 0,
@@ -69,9 +68,9 @@ const getStyles = (theme: ThemeData) =>
       elevation: 5,
     },
     image: {
-      height: moderateScale(50),
-      width: moderateScale(50),
-      borderRadius: moderateScale(25),
+      height: moderateScale(40),
+      width: moderateScale(40),
+      borderRadius: moderateScale(20),
       resizeMode: 'contain',
     },
   });

@@ -58,9 +58,12 @@ const MainScreen: React.FC<Props> = ({navigation}) => {
             tabBarActiveTintColor: theme.onPrimaryContainer,
             tabBarInactiveTintColor: theme.secondaryColor,
             tabBarStyle: {
-              paddingBottom: bottom === 0 ? verticalScale(6) : bottom,
+              // paddingBottom: bottom === 0 ? verticalScale(6) : bottom,
+              height: verticalScale(70),
               paddingTop: verticalScale(6),
               backgroundColor: theme.whiteInverse,
+              borderTopWidth: 0.5,
+              borderColor: theme.onSecondary,
             },
           }}
           initialRouteName="HOME">

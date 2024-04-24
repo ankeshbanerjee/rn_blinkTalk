@@ -9,7 +9,6 @@ import {LightTheme} from '../theme/light_theme';
 import {getData, rootNavigationRef} from '../utils/apputils';
 import {Constant} from '../utils/constant';
 import LoginScreen from '../screens/LoginScreen';
-import HomeScreen from '../screens/MainScreen';
 import ChatScreen from '../screens/ChatScreen';
 import MainScreen from '../screens/MainScreen';
 import ImageView from '../screens/ImageView';

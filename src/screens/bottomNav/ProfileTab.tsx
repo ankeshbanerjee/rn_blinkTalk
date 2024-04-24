@@ -242,7 +242,6 @@ const ProfileTab: React.FC<Props> = ({navigation}) => {
             size={RFValue(22)}
           />
         </RippleButton>
-        <Divider />
       </ScrollView>
       <BottomSheetComponent ref={bottomSheetRef} snapPoint={50}>
         <View

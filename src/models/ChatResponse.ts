@@ -29,3 +29,30 @@ export interface User {
   updatedAt: string;
   __v: number;
 }
+
+export interface CreateChatResponse {
+  result: {
+    chat: Chat;
+  };
+  success: boolean;
+  message: string;
+}
+
+export interface CreateGroupChatResponse {
+  result: {
+    chat: GroupChat;
+  };
+  success: boolean;
+  message: string;
+}
+
+export interface GroupChat {
+  _id: string;
+  chatName: string;
+  isGroupChat: boolean;
+  users: User[];
+  groupAdmin: User;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}

@@ -13,7 +13,7 @@ export const DarkTheme: ThemeData = {
       tertiary: ColorAssets.emerald500,
     },
   },
-  primaryColor: ColorAssets.blue500,
+  primaryColor: ColorAssets.blue600,
   primaryContainer: ColorAssets.blue400,
   onPrimaryContainer: ColorAssets.blue600,
   onPrimary: ColorAssets.blue200,
