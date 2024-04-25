@@ -68,3 +68,20 @@ export function isVideoUrl(url: string): boolean {
 
   return hasVideoExtension;
 }
+
+export function get_url_extension(url: string): string {
+  return url.split(/[#?]/)[0].split('.').pop().trim();
+}
+
+export function isImageUrl(url: string): boolean {
+  const imageExtensions: string[] = [
+    '.jpg',
+    '.jpeg',
+    '.png',
+    '.gif',
+    '.bmp',
+    '.webp',
+  ];
+  const lowerCaseUrl = url.toLowerCase();
+  return imageExtensions.some(ext => lowerCaseUrl.endsWith(ext));
+}

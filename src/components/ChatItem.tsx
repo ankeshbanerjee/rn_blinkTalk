@@ -9,7 +9,6 @@ import {ThemeData} from '../theme/theme_data';
 import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
 import {gs} from '../theme/global_styles';
 import {RFValue} from 'react-native-responsive-fontsize';
-import ColorAssets from '../theme/colors';
 
 interface Props {
   chat: Chat;
@@ -71,6 +70,6 @@ const getStyles = (theme: ThemeData) =>
       height: moderateScale(40),
       width: moderateScale(40),
       borderRadius: moderateScale(20),
-      resizeMode: 'contain',
+      resizeMode: 'cover',
     },
   });

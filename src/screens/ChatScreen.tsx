@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Dimensions,
   FlatList,
   ImageBackground,
   Platform,
@@ -39,10 +40,20 @@ import IcSend from '../../assets/svg/IcSend';
 import {safeApiCall} from '../utils/axios_utils';
 import {createMessage, fetchMessages} from '../services/message_services';
 import {Message} from '../models/MessageResponse';
-import {showToast, UiState} from '../utils/apputils';
+import {
+  get_url_extension,
+  isImageUrl,
+  isVideoUrl,
+  showToast,
+  UiState,
+} from '../utils/apputils';
 import ColorAssets from '../theme/colors';
 import moment from 'moment';
 import LoadingComponent from '../components/LoadingComponent';
+import DocumentPicker from 'react-native-document-picker';
+import {uploadSingleFile} from '../services/upload_service';
+import LoadingModal from '../components/LoadingModal';
+import handleDownloadAndView from '../services/download_and_view';
 
 type Props = NativeStackScreenProps<RootStackParamsList, 'CHAT'>;
 
@@ -57,18 +68,72 @@ const ChatScreen: React.FC<Props> = ({navigation, route}) => {
   const msgRef = useRef<IconTextFieldRefProps>(null);
   const [uiState, setUiState] = useState<UiState>('idle');
   const flatListRef = useRef<FlatList>(null);
+  interface File {
+    name: string;
+    type: string;
+    url: string;
+  }
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSendMessage = () => {
     const msgTxt = msgRef.current?.getText();
-    if (!msgTxt || msgTxt.trim().length === 0) {
-      showToast('Please enter a valid message');
-      return;
+    if (!uploadedFile) {
+      if (!msgTxt || msgTxt.trim().length === 0) {
+        showToast('Please enter a valid message');
+        return;
+      }
     }
     safeApiCall(async () => {
-      const res = await createMessage(chat._id, msgTxt);
+      const res = uploadedFile
+        ? await createMessage(chat._id, msgTxt ?? '', uploadedFile.url)
+        : await createMessage(chat._id, msgTxt ?? '');
       socket.emit('message', JSON.stringify(res.data.result.message));
       msgRef.current?.setValue('');
+      setUploadedFile(null);
     });
+  };
+
+  const handleDocumentUpload = () => {
+    safeApiCall(
+      async () => {
+        const doc = await DocumentPicker.pickSingle({
+          type: [
+            DocumentPicker.types.pdf,
+            DocumentPicker.types.images,
+            DocumentPicker.types.video,
+            DocumentPicker.types.doc,
+            DocumentPicker.types.docx,
+            DocumentPicker.types.ppt,
+            DocumentPicker.types.pptx,
+          ],
+        });
+        const formData = new FormData();
+        if (!doc) return;
+        const fileData = {
+          uri: doc.uri,
+          name: doc.name,
+          type: doc.type,
+          size: doc.size,
+        };
+        formData.append('file', fileData);
+        formData.append('category', 'Chat');
+        // showToast('Loading...');
+        setIsLoading(true);
+        const res = await uploadSingleFile(formData);
+        const fileUrl = res.data.result.fileUrl;
+        console.log(doc);
+        setUploadedFile({
+          name: doc.name as string,
+          type: doc.type!,
+          url: fileUrl,
+        });
+        setIsLoading(false);
+      },
+      () => {
+        setIsLoading(false);
+      },
+    );
   };
 
   useEffect(() => {
@@ -171,48 +236,121 @@ const ChatScreen: React.FC<Props> = ({navigation, route}) => {
                 item.sender._id === user?._id ? 'me' : 'others';
               return (
                 <>
-                  <View
-                    style={
-                      senderType === 'me'
-                        ? styles.sendChatContainer
-                        : styles.receiveChatContainer
-                    }>
-                    {chat.isGroupChat && senderType !== 'me' && (
-                      <SimpleText
-                        size={RFValue(10)}
-                        color={theme.primaryColor}
-                        fontWeight="bold"
-                        style={{top: -4}}>
-                        {item.sender.name}
-                      </SimpleText>
-                    )}
-                    <SimpleText
+                  {item.attachment ? (
+                    <Pressable
                       style={{
-                        fontSize: RFValue(12),
-                        color:
-                          senderType === 'me'
-                            ? ColorAssets.white
-                            : theme.blackInverse,
-                        marginBottom: 4,
-                      }}>
-                      {item.content}
-                      {Platform.OS === 'ios'
-                        ? '              \u00a0'
-                        : '           \u00a0'}
-                    </SimpleText>
-                    <SimpleText
-                      style={{
-                        fontSize: RFValue(8),
-                        color:
-                          senderType === 'me'
-                            ? ColorAssets.gray200
-                            : theme.secondaryColor,
-                        alignSelf: 'flex-end',
+                        ...gs.row,
+                        ...{
+                          // backgroundColor: theme.backgroungColor,
+                          marginTop:
+                            item.content.length === 0 ? verticalScale(12) : 0,
+                          padding: moderateScale(10),
+                          ...(senderType === 'me'
+                            ? {borderTopLeftRadius: scale(10)}
+                            : {borderTopRightRadius: scale(10)}),
+                          borderBottomRightRadius: scale(10),
+                          borderBottomLeftRadius: scale(10),
+                          borderWidth: scale(1),
+                          borderColor: theme.secondaryContainer,
+                          alignSelf:
+                            senderType === 'me' ? 'flex-end' : 'flex-start',
+                        },
                       }}
-                      fontWeight="thin">
-                      {moment(item.createdAt).format('h:mm a')}
-                    </SimpleText>
-                  </View>
+                      onPress={() => {
+                        if (
+                          isImageUrl(item.attachment) ||
+                          isVideoUrl(item.attachment)
+                        ) {
+                          navigation.navigate('IMAGE_VIEW', {
+                            imageUri: item.attachment,
+                          });
+                        } else {
+                          handleDownloadAndView(item.attachment);
+                          showToast('Please wait...');
+                        }
+                      }}>
+                      <Image
+                        source={
+                          isImageUrl(item.attachment)
+                            ? {uri: item.attachment}
+                            : ImageAssets.DocIcon
+                        }
+                        style={styles.docIcon}
+                      />
+                      <SimpleText
+                        style={{
+                          // opacity: 0.5,
+                          color: theme.blackInverse,
+                          marginLeft: scale(5),
+                          marginEnd: scale(16),
+                        }}>
+                        {`Tap to view the ${get_url_extension(
+                          item.attachment,
+                        )} file`}
+                        {/* {item.content.length === 0
+                          ? Platform.OS === 'ios'
+                            ? '              \u00a0'
+                            : '           \u00a0'
+                          : null} */}
+                      </SimpleText>
+                      {item.content.length === 0 ? (
+                        <SimpleText
+                          style={{
+                            fontSize: RFValue(8),
+                            color: theme.secondaryColor,
+                            alignSelf: 'flex-end',
+                          }}
+                          fontWeight="thin">
+                          {moment(item.createdAt).format('h:mm a')}
+                        </SimpleText>
+                      ) : null}
+                    </Pressable>
+                  ) : null}
+                  {item.content.length !== 0 && (
+                    <View
+                      style={
+                        senderType === 'me'
+                          ? styles.sendChatContainer
+                          : styles.receiveChatContainer
+                      }>
+                      {chat.isGroupChat && senderType !== 'me' && (
+                        <SimpleText
+                          size={RFValue(10)}
+                          color={theme.blackInverse}
+                          fontWeight="bold"
+                          style={{top: -4}}>
+                          {item.sender.name}
+                        </SimpleText>
+                      )}
+                      <SimpleText
+                        style={{
+                          fontSize: RFValue(12),
+                          color:
+                            senderType === 'me'
+                              ? ColorAssets.white
+                              : theme.blackInverse,
+                          marginBottom: 4,
+                        }}>
+                        {item.content}
+                        {Platform.OS === 'ios'
+                          ? '              \u00a0'
+                          : '           \u00a0'}
+                      </SimpleText>
+                      <SimpleText
+                        style={{
+                          fontSize: RFValue(8),
+                          color:
+                            senderType === 'me'
+                              ? ColorAssets.gray200
+                              : theme.secondaryColor,
+                          alignSelf: 'flex-end',
+                        }}
+                        fontWeight="thin">
+                        {moment(item.createdAt).format('h:mm a')}
+                      </SimpleText>
+                    </View>
+                  )}
+
                   {index === messages.length - 1 ||
                   new Date(
                     messages[index + 1].createdAt,
@@ -232,6 +370,56 @@ const ChatScreen: React.FC<Props> = ({navigation, route}) => {
               );
             }}
           />
+        )}
+        {uploadedFile && (
+          <Pressable
+            style={{
+              ...gs.row,
+              ...{
+                padding: moderateScale(10),
+                width: Dimensions.get('window').width * 0.9,
+                alignSelf: 'center',
+                backgroundColor: theme.whiteInverse,
+                borderRadius: 10,
+              },
+            }}
+            onPress={() => {
+              if (
+                isImageUrl(uploadedFile.url) ||
+                isVideoUrl(uploadedFile.url)
+              ) {
+                navigation.navigate('IMAGE_VIEW', {
+                  imageUri: uploadedFile.url,
+                });
+              } else {
+                handleDownloadAndView(uploadedFile.url);
+                showToast('Please wait...');
+              }
+            }}>
+            <Pressable
+              style={styles.crossBtn}
+              onPress={function () {
+                setUploadedFile(null);
+              }}>
+              <MaterialCommunityIcons
+                name="close"
+                size={RFValue(16)}
+                color={ColorAssets.white}
+                style={{alignSelf: 'center'}}
+              />
+            </Pressable>
+            <Image
+              source={
+                uploadedFile && uploadedFile.type.startsWith('image')
+                  ? {uri: uploadedFile.url}
+                  : ImageAssets.DocIcon
+              }
+              style={styles.docIcon}
+            />
+            <SimpleText style={{marginLeft: scale(5), width: '85%'}}>
+              {uploadedFile?.name}
+            </SimpleText>
+          </Pressable>
         )}
         <View
           style={[
@@ -265,7 +453,7 @@ const ChatScreen: React.FC<Props> = ({navigation, route}) => {
                 theme === LightTheme ? '#F3F4F6' : theme.surfaceVariant,
             }}
           />
-          <RippleButton style={{marginEnd: 10}}>
+          <RippleButton style={{marginEnd: 10}} onPress={handleDocumentUpload}>
             <MaterialCommunityIcons
               name="attachment"
               size={30}
@@ -277,6 +465,7 @@ const ChatScreen: React.FC<Props> = ({navigation, route}) => {
           </Pressable>
         </View>
       </ImageBackground>
+      <LoadingModal visible={isLoading} />
     </View>
   );
 };
@@ -298,7 +487,7 @@ const getStyles = (theme: ThemeData) =>
       height: moderateScale(40),
       width: moderateScale(40),
       borderRadius: moderateScale(20),
-      resizeMode: 'contain',
+      resizeMode: 'cover',
     },
     input: {
       flex: 1,
@@ -358,5 +547,27 @@ const getStyles = (theme: ThemeData) =>
       backgroundColor: theme.primaryColor,
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    docIcon: {
+      width: scale(30),
+      height: scale(30),
+      borderRadius: scale(10),
+    },
+    imgFile: {
+      height: verticalScale(180),
+      width: scale(140),
+      resizeMode: 'cover',
+      borderRadius: 20,
+    },
+    crossBtn: {
+      position: 'absolute',
+      right: -8,
+      top: -8,
+      height: 24,
+      width: 24,
+      borderRadius: 12,
+      backgroundColor: ColorAssets.red600,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   });

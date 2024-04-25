@@ -3,4 +3,5 @@ export const ImageAssets = {
   Logo: require('./images/Logo.png'),
   Group: require('./images/GroupPic.jpg'),
   ChatBg: require('./images/ChatBg.jpeg'),
+  DocIcon: require('./images/docIcon.png'),
 };
