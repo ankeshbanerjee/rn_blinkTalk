@@ -34,7 +34,6 @@ import {
   UiState,
 } from '../../utils/apputils';
 import {Constant} from '../../utils/constant';
-import {LightTheme} from '../../theme/light_theme';
 import {safeApiCall} from '../../utils/axios_utils';
 import BottomSheetComponent, {
   BottomSheetRefType,
@@ -53,7 +52,7 @@ const ProfileTab: React.FC<Props> = ({navigation}) => {
   const {theme, toggleTheme} = useContext(ThemeContext);
   const {user, deleteUser, loadUser} = useContext(UserContext);
   const styles = useMemo(() => getStyles(theme), [theme]);
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(theme.isDark);
   const bottomSheetRef = useRef<BottomSheetRefType>(null);
   const nameRef = useRef<IconTextFieldRefProps>(null);
   const [uiState, setUiState] = useState<UiState>('idle');
@@ -79,16 +78,16 @@ const ProfileTab: React.FC<Props> = ({navigation}) => {
     ]);
   }
 
-  const getTheme = async () => {
-    const theme = await getData(Constant.THEME_DATA);
-    if (theme && theme === 'dark_theme') {
-      setIsDarkMode(true);
-    }
-  };
+  // const getTheme = async () => {
+  //   const theme = await getData(Constant.THEME_DATA);
+  //   if (theme && theme === 'dark_theme') {
+  //     setIsDarkMode(true);
+  //   }
+  // };
 
-  useEffect(() => {
-    getTheme();
-  }, []);
+  // useEffect(() => {
+  //   getTheme();
+  // }, []);
 
   return (
     <View style={styles.container}>
@@ -210,7 +209,7 @@ const ProfileTab: React.FC<Props> = ({navigation}) => {
             ios_backgroundColor="#3e3e3e"
             onValueChange={async () => {
               setIsDarkMode(p => !p);
-              if (theme === LightTheme) {
+              if (!theme.isDark) {
                 await storeData(Constant.THEME_DATA, 'dark_theme');
                 toggleTheme();
               } else {
@@ -286,6 +285,7 @@ const ProfileTab: React.FC<Props> = ({navigation}) => {
                 showToast('Same as previous. Please change to update');
                 return;
               }
+              bottomSheetRef.current?.close();
               setUiState('loading');
               safeApiCall(
                 async () => {
@@ -293,7 +293,6 @@ const ProfileTab: React.FC<Props> = ({navigation}) => {
                   loadUser(res.data.result.user);
                   showToast(res.data.message);
                   setUiState('success');
-                  bottomSheetRef.current?.close();
                 },
                 () => {
                   setUiState('failure');

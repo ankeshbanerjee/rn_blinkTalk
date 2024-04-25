@@ -3,6 +3,7 @@ import {ThemeData} from './theme_data';
 import ColorAssets from './colors';
 
 export const LightTheme: ThemeData = {
+  isDark: false,
   paperTheme: {
     ...MD3LightTheme,
     colors: {

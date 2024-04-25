@@ -19,7 +19,6 @@ const ColorAssets = {
   lightBlue: '#B4D4FF',
   lightYellow: '#FFF78A',
 
-  // circles
   blue700: '#1D4ED8',
   blue600: '#2563EB',
   blue500: '#3882F6',

@@ -24,6 +24,8 @@ export interface Sender {
   _id: string;
   name: string;
   email: string;
+  profilePicture: string;
+  createdAt: string;
 }
 
 export interface Chat {

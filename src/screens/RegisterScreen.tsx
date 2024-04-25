@@ -4,12 +4,19 @@ import {
   Pressable,
   Dimensions,
   StatusBar,
-  Alert,
   Keyboard,
   ImageBackground,
   ScrollView,
 } from 'react-native';
-import React, {FC, Ref, useContext, useEffect, useRef, useState} from 'react';
+import React, {
+  FC,
+  Ref,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {ThemeContext} from '../contexts/theme_context';
 import {ThemeData} from '../theme/theme_data';
 import SimpleText from '../components/SimpleText';
@@ -27,29 +34,40 @@ import LoadingModal from '../components/LoadingModal';
 import IconTextField2 from '../components/IconTextField2';
 import {RootStackParamsList} from '../navigation/params';
 import {ImageAssets} from '../../assets';
-import {login, validateEmail} from '../services/auth_services';
+import {
+  login,
+  register,
+  validateEmail,
+  validatePassword,
+} from '../services/auth_services';
 import {initService, safeApiCall} from '../utils/axios_utils';
 
-type LoginScreenProps = NativeStackScreenProps<RootStackParamsList, 'LOGIN'>;
+type Props = NativeStackScreenProps<RootStackParamsList, 'REGISTER'>;
 
 const {height, width} = Dimensions.get('window');
 
-const Login: FC<LoginScreenProps> = ({navigation}) => {
+const Register: FC<Props> = ({navigation}) => {
   const {theme} = useContext(ThemeContext);
   const styles = getStyles(theme);
+  const nameRef = useRef<IconTextFieldRefProps>(null);
   const emailRef = useRef<IconTextFieldRefProps>(null);
   const passwordRef = useRef<IconTextFieldRefProps>(null);
   const [uiState, setUiState] = useState<UiState>('idle');
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
-  const handleLogin = function () {
+  const handleRegister = function () {
     if (uiState === 'loading') {
       return;
     }
+    const name = nameRef.current!.getText();
     const email = emailRef.current!.getText();
     const password = passwordRef.current!.getText();
     console.log(email, password);
-    if (email.trim().length === 0 || password.trim().length === 0) {
+    if (
+      name.trim().length === 0 ||
+      email.trim().length === 0 ||
+      password.trim().length === 0
+    ) {
       showToast('Please enter all the details');
       return;
     }
@@ -62,10 +80,19 @@ const Login: FC<LoginScreenProps> = ({navigation}) => {
       showToast('Please enter valid email');
       return;
     }
+    try {
+      if (validatePassword(password) !== null) {
+        showToast('Please enter a valid password');
+        return;
+      }
+    } catch (error) {
+      showToast('Please enter a valid password');
+      return;
+    }
     setUiState('loading');
     safeApiCall(
       async () => {
-        const res = await login(email, password);
+        const res = await register(name, email, password);
         await storeData(Constant.AUTH_TOKEN, res.data.result.accessToken!);
         await initService(res.data.result.accessToken!);
         setUiState('success');
@@ -120,8 +147,16 @@ const Login: FC<LoginScreenProps> = ({navigation}) => {
           keyboardShouldPersistTaps="handled">
           <View style={{paddingTop: height * 0.25}}>
             <SimpleText fontWeight="bold" style={styles.heading}>
-              {`Already,\nRegistered?`}
+              {`Hello,\nNew User!`}
             </SimpleText>
+            <IconTextField2
+              title={'Name'}
+              ref={nameRef as Ref<any>}
+              securedText={false}
+              placeholder="Enter your name"
+              allowSpaces={false}
+              inputContainerStyle={{borderColor: '#E3E3E3'}}
+            />
             <IconTextField2
               title={'Email'}
               ref={emailRef as Ref<any>}
@@ -157,7 +192,6 @@ const Login: FC<LoginScreenProps> = ({navigation}) => {
               textColor={theme.whiteInverse}
               labelStyle={{
                 fontSize: RFValue(15),
-                // fontFamily: 'Inter-regular',
                 fontWeight: '400',
                 includeFontPadding: false,
               }}
@@ -167,9 +201,9 @@ const Login: FC<LoginScreenProps> = ({navigation}) => {
                 paddingVertical: verticalScale(4),
               }}
               onPress={() => {
-                handleLogin();
+                handleRegister();
               }}>
-              Sign in
+              Sign up
             </Button>
             <View
               style={{
@@ -178,11 +212,11 @@ const Login: FC<LoginScreenProps> = ({navigation}) => {
                 alignSelf: 'center',
                 marginTop: verticalScale(10),
               }}>
-              <SimpleText>Don't have an account?</SimpleText>
+              <SimpleText>Already have an account?</SimpleText>
               <RippleButton
                 style={{padding: moderateScale(5)}}
-                onPress={() => navigation.navigate('REGISTER')}>
-                <SimpleText fontWeight="bold">Register</SimpleText>
+                onPress={() => navigation.navigate('LOGIN')}>
+                <SimpleText fontWeight="bold">Login</SimpleText>
               </RippleButton>
             </View>
           </View>
@@ -193,7 +227,7 @@ const Login: FC<LoginScreenProps> = ({navigation}) => {
   );
 };
 
-export default Login;
+export default Register;
 
 const getStyles = (theme: ThemeData) =>
   StyleSheet.create({

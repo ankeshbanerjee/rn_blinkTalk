@@ -4,6 +4,7 @@ import {LightTheme} from './light_theme';
 import ColorAssets from './colors';
 
 export const DarkTheme: ThemeData = {
+  isDark: true,
   paperTheme: {
     ...MD3DarkTheme,
     colors: {

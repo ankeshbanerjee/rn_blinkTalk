@@ -34,7 +34,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import IconTextField, {
   IconTextFieldRefProps,
 } from '../components/IconTextField';
-import {LightTheme} from '../theme/light_theme';
 import RippleButton from '../components/ripple_button';
 import IcSend from '../../assets/svg/IcSend';
 import {safeApiCall} from '../utils/axios_utils';
@@ -54,6 +53,7 @@ import DocumentPicker from 'react-native-document-picker';
 import {uploadSingleFile} from '../services/upload_service';
 import LoadingModal from '../components/LoadingModal';
 import handleDownloadAndView from '../services/download_and_view';
+import {User} from '../models/UserResponse';
 
 type Props = NativeStackScreenProps<RootStackParamsList, 'CHAT'>;
 
@@ -186,19 +186,45 @@ const ChatScreen: React.FC<Props> = ({navigation, route}) => {
           }}
         />
         {chat.isGroupChat ? (
-          <Image source={ImageAssets.Group} style={styles.profileImage} />
+          <Pressable
+            onPress={function () {
+              navigation.navigate('GROUP_DETAILS', {
+                chat,
+              });
+            }}>
+            <Image source={ImageAssets.Group} style={styles.profileImage} />
+          </Pressable>
         ) : (
-          <Image
-            source={{
-              uri: chat.users.find(it => it._id !== user?._id)?.profilePicture,
-            }}
-            style={styles.profileImage}
-          />
+          <Pressable
+            onPress={function () {
+              navigation.navigate('VIEW_PROFILE', {
+                user: chat.users.find(item => item._id !== user?._id) as User,
+              });
+            }}>
+            <Image
+              source={{
+                uri: chat.users.find(it => it._id !== user?._id)
+                  ?.profilePicture,
+              }}
+              style={styles.profileImage}
+            />
+          </Pressable>
         )}
-        <View
+        <Pressable
           style={{
             marginLeft: scale(10),
             justifyContent: 'center',
+          }}
+          onPress={function () {
+            if (chat.isGroupChat) {
+              navigation.navigate('GROUP_DETAILS', {
+                chat,
+              });
+            } else {
+              navigation.navigate('VIEW_PROFILE', {
+                user: chat.users.find(item => item._id !== user?._id) as User,
+              });
+            }
           }}>
           <SimpleText
             color={theme.secondaryColor}
@@ -213,7 +239,7 @@ const ChatScreen: React.FC<Props> = ({navigation, route}) => {
               {chat.isGroupChat ? 'someone is typing...' : 'typing...'}
             </SimpleText>
           ) : null}
-        </View>
+        </Pressable>
       </View>
       <ImageBackground
         source={ImageAssets.ChatBg}
@@ -318,7 +344,14 @@ const ChatScreen: React.FC<Props> = ({navigation, route}) => {
                           size={RFValue(10)}
                           color={theme.blackInverse}
                           fontWeight="bold"
-                          style={{top: -4}}>
+                          style={{top: -4}}
+                          textProps={{
+                            onPress: function () {
+                              navigation.navigate('VIEW_PROFILE', {
+                                user: item.sender,
+                              });
+                            },
+                          }}>
                           {item.sender.name}
                         </SimpleText>
                       )}
@@ -449,8 +482,7 @@ const ChatScreen: React.FC<Props> = ({navigation, route}) => {
               },
             }}
             inputContainerStyle={{
-              backgroundColor:
-                theme === LightTheme ? '#F3F4F6' : theme.surfaceVariant,
+              backgroundColor: !theme.isDark ? '#F3F4F6' : theme.surfaceVariant,
             }}
           />
           <RippleButton style={{marginEnd: 10}} onPress={handleDocumentUpload}>

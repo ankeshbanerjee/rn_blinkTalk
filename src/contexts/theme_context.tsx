@@ -2,7 +2,6 @@ import {createContext, FC, PropsWithChildren, useState} from 'react';
 import {ThemeData} from '../theme/theme_data';
 import {LightTheme} from '../theme/light_theme';
 import {PaperProvider} from 'react-native-paper';
-import {useColorScheme} from 'react-native';
 import {DarkTheme} from '../theme/dark_theme';
 
 type ThemeContextType = {
@@ -18,7 +17,7 @@ export const ThemeContextProvider: FC<PropsWithChildren> = ({children}) => {
   const [theme, toggleTheme] = useState<ThemeData>(LightTheme);
 
   const changeTheme = () => {
-    if (theme === LightTheme) {
+    if (theme.isDark === false) {
       toggleTheme(DarkTheme);
     } else {
       toggleTheme(LightTheme);

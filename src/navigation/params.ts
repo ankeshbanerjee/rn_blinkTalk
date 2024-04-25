@@ -1,8 +1,10 @@
 import {Chat} from '../models/ChatResponse';
+import {User} from '../models/UserResponse';
 
 export type RootStackParamsList = {
   SPLASH: undefined;
   LOGIN: undefined;
+  REGISTER: undefined;
   MAIN: undefined;
   CHAT: {
     chat: Chat;
@@ -13,6 +15,12 @@ export type RootStackParamsList = {
       media: string[];
       currIndex: number;
     };
+  };
+  VIEW_PROFILE: {
+    user: User;
+  };
+  GROUP_DETAILS: {
+    chat: Chat;
   };
 };
 

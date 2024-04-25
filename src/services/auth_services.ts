@@ -27,3 +27,6 @@ export const validatePassword = (password: string): string | null => {
 
 export const login = (email: string, password: string) =>
   axios.post<LoginResponse>('/user/login', {email, password});
+
+export const register = (name: string, email: string, password: string) =>
+  axios.post<LoginResponse>('/user/register', {name, email, password});

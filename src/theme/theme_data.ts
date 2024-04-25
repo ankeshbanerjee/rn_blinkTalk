@@ -1,6 +1,7 @@
 import {MD3Theme, PaperProvider} from 'react-native-paper';
 
 export type ThemeData = {
+  isDark: boolean;
   paperTheme: MD3Theme;
   primaryColor: string;
   primaryContainer: string;

@@ -1,5 +1,11 @@
-import {StatusBar, StyleSheet, Text, View} from 'react-native';
-import React, {useContext, useEffect} from 'react';
+import {StatusBar, View} from 'react-native';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {RootStackParamsList} from './params';
 import {NavigationContainer} from '@react-navigation/native';
@@ -12,25 +18,38 @@ import LoginScreen from '../screens/LoginScreen';
 import ChatScreen from '../screens/ChatScreen';
 import MainScreen from '../screens/MainScreen';
 import ImageView from '../screens/ImageView';
+import ViewProfileScreen from '../screens/ViewProfileScreen';
+import GroupDetailsScreen from '../screens/GroupDetailsScreen';
+import Register from '../screens/RegisterScreen';
+import {addEventListener} from '@react-native-community/netinfo';
+import {
+  BottomSheetBackdrop,
+  BottomSheetBackdropProps,
+} from '@gorhom/bottom-sheet';
+import BottomSheet from '@gorhom/bottom-sheet';
+import {Image} from 'react-native';
+import {scale, verticalScale} from 'react-native-size-matters';
+import {ImageAssets} from '../../assets';
+import SimpleText from '../components/SimpleText';
+import {RFValue} from 'react-native-responsive-fontsize';
 
 const Stack = createNativeStackNavigator<RootStackParamsList>();
 
 const Router = () => {
   const {theme, toggleTheme} = useContext(ThemeContext);
-  // const {isConnected} = useContext(NetInfoContext);
-  // const snapPoints = useMemo(() => ['25%'], []);
-  // const bottomSheetRef = useRef<BottomSheet>(null);
-  // const backdrop = useCallback(
-  //   (props: BottomSheetBackdropProps) => (
-  //     <BottomSheetBackdrop
-  //       appearsOnIndex={0}
-  //       disappearsOnIndex={-1}
-  //       pressBehavior={'none'}
-  //       {...props}
-  //     />
-  //   ),
-  //   [],
-  // );
+  const snapPoints = useMemo(() => ['25%'], []);
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const backdrop = useCallback(
+    (props: BottomSheetBackdropProps) => (
+      <BottomSheetBackdrop
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        pressBehavior={'none'}
+        {...props}
+      />
+    ),
+    [],
+  );
   const setTheme = async () => {
     const theme = await getData(Constant.THEME_DATA);
     if (theme && theme === 'dark_theme') {
@@ -40,24 +59,22 @@ const Router = () => {
 
   useEffect(() => {
     setTheme();
-    //   const unsubscribe = addEventListener(state => {
-    //     if (state.isConnected) {
-    //       setConnectionSts(true);
-    //       bottomSheetRef.current?.close();
-    //     } else {
-    //       setConnectionSts(false);
-    //       bottomSheetRef.current?.snapToIndex(0);
-    //     }
-    //   });
-    //   return () => {
-    //     unsubscribe();
-    //   };
+    const unsubscribe = addEventListener(state => {
+      if (state.isConnected) {
+        bottomSheetRef.current?.close();
+      } else {
+        bottomSheetRef.current?.snapToIndex(0);
+      }
+    });
+    return () => {
+      unsubscribe();
+    };
   }, []);
   return (
     <>
       <StatusBar
         backgroundColor={theme.surfaceVariant}
-        barStyle={theme === LightTheme ? 'dark-content' : 'light-content'}
+        barStyle={!theme.isDark ? 'dark-content' : 'light-content'}
       />
       <NavigationContainer ref={rootNavigationRef}>
         <Stack.Navigator
@@ -68,13 +85,16 @@ const Router = () => {
           initialRouteName="SPLASH">
           <Stack.Screen name="SPLASH" component={SplashScreen} />
           <Stack.Screen name="LOGIN" component={LoginScreen} />
+          <Stack.Screen name="REGISTER" component={Register} />
           <Stack.Screen name="MAIN" component={MainScreen} />
           <Stack.Screen name="CHAT" component={ChatScreen} />
           <Stack.Screen name="IMAGE_VIEW" component={ImageView} />
+          <Stack.Screen name="VIEW_PROFILE" component={ViewProfileScreen} />
+          <Stack.Screen name="GROUP_DETAILS" component={GroupDetailsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
 
-      {/* <BottomSheet
+      <BottomSheet
         handleIndicatorStyle={{
           backgroundColor: theme.backgroungColor,
           width: 85,
@@ -96,11 +116,9 @@ const Router = () => {
             No Internet Connection
           </SimpleText>
         </View>
-      </BottomSheet> */}
+      </BottomSheet>
     </>
   );
 };
 
 export default Router;
-
-const styles = StyleSheet.create({});

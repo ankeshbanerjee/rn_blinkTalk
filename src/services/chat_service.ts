@@ -12,3 +12,9 @@ export const createChat = (userId: string) =>
 
 export const createGroupChat = (chatName: string, users: string[]) =>
   axios.post<CreateGroupChatResponse>('/chat/group', {chatName, users});
+
+export const addUserToGroup = (userId: string, groupChatId: string) =>
+  axios.put<CreateChatResponse>('/chat/group/add', {userId, groupChatId});
+
+export const removeUser = (userId: string, groupChatId: string) =>
+  axios.put<CreateChatResponse>('/chat/group/remove', {userId, groupChatId});

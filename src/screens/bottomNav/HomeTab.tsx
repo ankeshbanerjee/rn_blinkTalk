@@ -83,9 +83,7 @@ const HomeTab: React.FC<Props> = ({navigation}) => {
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const newGroupChatBottomSheetRef = useRef<BottomSheetRefType>(null);
-  const [selectedUserIds, setSelectedUserIds] = useState<string[]>([
-    user?._id as string,
-  ]);
+  const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
   const groupNameBottomSheetRef = useRef<BottomSheetRefType>(null);
   const groupNameRef = useRef<IconTextFieldRefProps>(null);
 
@@ -212,13 +210,13 @@ const HomeTab: React.FC<Props> = ({navigation}) => {
                     {gap: 14, paddingVertical: verticalScale(10)},
                   ]}
                   onPress={function () {
+                    newSingleChatBottomSheetRef.current?.close();
                     setIsLoading(true);
                     safeApiCall(
                       async () => {
                         const res = await createChat(item._id);
                         showToast(res.data.message);
                         setIsLoading(false);
-                        newSingleChatBottomSheetRef.current?.close();
                         loadChats();
                       },
                       () => {
@@ -318,7 +316,7 @@ const HomeTab: React.FC<Props> = ({navigation}) => {
             width: '90%',
           }}
           onPress={function () {
-            if (selectedUserIds.length <= 1) {
+            if (selectedUserIds.length === 0) {
               showToast('Please select atleast one user');
               return;
             }
@@ -334,7 +332,7 @@ const HomeTab: React.FC<Props> = ({navigation}) => {
         ref={groupNameBottomSheetRef}
         snapPoint={50}
         onDismissCallback={function () {
-          setSelectedUserIds([user?._id as string]);
+          setSelectedUserIds([]);
           groupNameRef.current?.setValue('');
         }}>
         <View
@@ -374,22 +372,21 @@ const HomeTab: React.FC<Props> = ({navigation}) => {
                 showToast('Please enter a valid group name');
                 return;
               }
-              if (selectedUserIds.length <= 1) {
+              if (selectedUserIds.length === 0) {
                 showToast('There should atleast 2 members in a group');
                 return;
               }
+              groupNameBottomSheetRef.current?.close();
               setIsLoading(true);
               safeApiCall(
                 async () => {
                   const res = await createGroupChat(groupName, selectedUserIds);
                   showToast(res.data.message);
                   setIsLoading(false);
-                  groupNameBottomSheetRef.current?.close();
                   loadChats();
                 },
                 () => {
                   setIsLoading(false);
-                  groupNameBottomSheetRef.current?.close();
                 },
               );
             }}>
