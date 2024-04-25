@@ -8,7 +8,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useContext, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useContext, useMemo, useRef, useState} from 'react';
 import SimpleText from '../../components/SimpleText';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {BottomNavParamsList} from '../../navigation/params';
@@ -77,17 +77,6 @@ const ProfileTab: React.FC<Props> = ({navigation}) => {
       },
     ]);
   }
-
-  // const getTheme = async () => {
-  //   const theme = await getData(Constant.THEME_DATA);
-  //   if (theme && theme === 'dark_theme') {
-  //     setIsDarkMode(true);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getTheme();
-  // }, []);
 
   return (
     <View style={styles.container}>
