@@ -18,3 +18,6 @@ export const addUserToGroup = (userId: string, groupChatId: string) =>
 
 export const removeUser = (userId: string, groupChatId: string) =>
   axios.put<CreateChatResponse>('/chat/group/remove', {userId, groupChatId});
+
+export const fetchChatById = (id: string) =>
+  axios.get<CreateChatResponse>(`/chat/find?id=${id}`);

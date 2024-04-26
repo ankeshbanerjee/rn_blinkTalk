@@ -6,7 +6,14 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import React, {useCallback, useContext, useMemo, useRef, useState} from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamsList} from '../navigation/params';
 import {ThemeData} from '../theme/theme_data';
@@ -27,14 +34,19 @@ import {safeApiCall} from '../utils/axios_utils';
 import LoadingComponent from '../components/LoadingComponent';
 import IconTextField from '../components/IconTextField';
 import {fetchAllUsers} from '../services/user_services';
-import {addUserToGroup, removeUser} from '../services/chat_service';
+import {
+  addUserToGroup,
+  fetchChatById,
+  removeUser,
+} from '../services/chat_service';
 import {showToast} from '../utils/apputils';
 import LoadingModal from '../components/LoadingModal';
+import {Chat} from '../models/ChatResponse';
 
 type Props = NativeStackScreenProps<RootStackParamsList, 'GROUP_DETAILS'>;
 
 const GroupDetailsScreen: React.FC<Props> = ({navigation, route}) => {
-  const {chat} = route.params;
+  const [chat, setChat] = useState<Chat>({} as Chat);
   const {theme} = useContext(ThemeContext);
   const {user} = useContext(UserContext);
   const styles = useMemo(() => getStyles(theme), [theme]);
@@ -59,6 +71,20 @@ const GroupDetailsScreen: React.FC<Props> = ({navigation, route}) => {
       },
       () => {
         setUsersLoading(false);
+      },
+    );
+  }, []);
+
+  useEffect(() => {
+    setIsLoading(true);
+    safeApiCall(
+      async () => {
+        const res = await fetchChatById(route.params.chatId);
+        setChat(res.data.result.chat);
+        setIsLoading(false);
+      },
+      () => {
+        setIsLoading(false);
       },
     );
   }, []);
@@ -121,8 +147,10 @@ const GroupDetailsScreen: React.FC<Props> = ({navigation, route}) => {
                           async () => {
                             const res = await removeUser(item._id, chat._id);
                             showToast(res.data.message);
+                            const res1 = await fetchChatById(chat._id);
+                            setChat(res1.data.result.chat);
                             setIsLoading(false);
-                            navigation.reset({routes: [{name: 'MAIN'}]});
+                            // navigation.reset({routes: [{name: 'MAIN'}]});
                           },
                           () => {
                             setIsLoading(false);
@@ -197,9 +225,11 @@ const GroupDetailsScreen: React.FC<Props> = ({navigation, route}) => {
                         async () => {
                           const res = await addUserToGroup(item._id, chat._id);
                           showToast(res.data.message);
+                          const res1 = await fetchChatById(chat._id);
+                          setChat(res1.data.result.chat);
                           setIsLoading(false);
                           // setTimeout(() => {
-                          navigation.reset({routes: [{name: 'MAIN'}]});
+                          // navigation.reset({routes: [{name: 'MAIN'}]});
                           // }, 400);
                         },
                         () => {

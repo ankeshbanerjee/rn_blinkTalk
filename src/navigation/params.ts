@@ -20,7 +20,7 @@ export type RootStackParamsList = {
     user: User;
   };
   GROUP_DETAILS: {
-    chat: Chat;
+    chatId: string;
   };
 };
 

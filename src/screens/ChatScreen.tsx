@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import React, {
   Ref,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -54,6 +55,7 @@ import {uploadSingleFile} from '../services/upload_service';
 import LoadingModal from '../components/LoadingModal';
 import handleDownloadAndView from '../services/download_and_view';
 import {User} from '../models/UserResponse';
+import {useFocusEffect} from '@react-navigation/native';
 
 type Props = NativeStackScreenProps<RootStackParamsList, 'CHAT'>;
 
@@ -136,23 +138,43 @@ const ChatScreen: React.FC<Props> = ({navigation, route}) => {
     );
   };
 
-  useEffect(() => {
-    const getMessages = () => {
-      setUiState('loading');
-      safeApiCall(
-        async () => {
-          const res = await fetchMessages(chat._id);
-          setMessages(res.data.result.messages.reverse());
-          socket.emit('join room', chat._id);
-          setUiState('success');
-        },
-        () => {
-          setUiState('failure');
-        },
-      );
-    };
-    getMessages();
-  }, []);
+  // useEffect(() => {
+  //   const getMessages = () => {
+  //     setUiState('loading');
+  //     safeApiCall(
+  //       async () => {
+  //         const res = await fetchMessages(chat._id);
+  //         setMessages(res.data.result.messages.reverse());
+  //         socket.emit('join room', chat._id);
+  //         setUiState('success');
+  //       },
+  //       () => {
+  //         setUiState('failure');
+  //       },
+  //     );
+  //   };
+  //   getMessages();
+  // }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      const getMessages = () => {
+        setUiState('loading');
+        safeApiCall(
+          async () => {
+            const res = await fetchMessages(chat._id);
+            setMessages(res.data.result.messages.reverse());
+            socket.emit('join room', chat._id);
+            setUiState('success');
+          },
+          () => {
+            setUiState('failure');
+          },
+        );
+      };
+      getMessages();
+    }, [socket]),
+  );
 
   useEffect(() => {
     socket.on('message', message => {
@@ -189,7 +211,7 @@ const ChatScreen: React.FC<Props> = ({navigation, route}) => {
           <Pressable
             onPress={function () {
               navigation.navigate('GROUP_DETAILS', {
-                chat,
+                chatId: chat._id,
               });
             }}>
             <Image source={ImageAssets.Group} style={styles.profileImage} />
@@ -218,7 +240,7 @@ const ChatScreen: React.FC<Props> = ({navigation, route}) => {
           onPress={function () {
             if (chat.isGroupChat) {
               navigation.navigate('GROUP_DETAILS', {
-                chat,
+                chatId: chat._id,
               });
             } else {
               navigation.navigate('VIEW_PROFILE', {
