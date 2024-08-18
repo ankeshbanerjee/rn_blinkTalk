@@ -1,4 +1,4 @@
-import {StyleSheet, View} from 'react-native';
+import {Platform, StyleSheet, View} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {UserContext} from '../contexts/UserContext';
 import {safeApiCall} from '../utils/axios_utils';
@@ -59,7 +59,8 @@ const MainScreen: React.FC<Props> = ({navigation}) => {
             tabBarInactiveTintColor: theme.secondaryColor,
             tabBarStyle: {
               // paddingBottom: bottom === 0 ? verticalScale(6) : bottom,
-              height: verticalScale(70),
+              height:
+                Platform.OS === 'ios' ? verticalScale(70) : verticalScale(46),
               paddingTop: verticalScale(6),
               backgroundColor: theme.whiteInverse,
               borderTopWidth: 0.5,

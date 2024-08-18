@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View} from 'react-native';
 import React, {useContext} from 'react';
 import {scale, verticalScale} from 'react-native-size-matters';
 import {RFValue} from 'react-native-responsive-fontsize';
@@ -21,7 +21,8 @@ const HomeAppBar: React.FC = () => {
           backgroundColor: theme.backgroungColor,
           gap: 8,
           paddingHorizontal: scale(16),
-          paddingTop: top + verticalScale(6),
+          paddingTop:
+            top + Platform.OS === 'ios' ? verticalScale(6) : verticalScale(12),
           paddingBottom: verticalScale(10),
           shadowColor: ColorAssets.black,
           shadowOffset: {

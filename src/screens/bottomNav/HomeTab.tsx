@@ -58,13 +58,21 @@ type Props = BottomTabScreenProps<BottomNavParamsList, 'HOME'>;
 const actions: IActionProps[] = [
   {
     text: 'New Single Chat',
-    icon: <AntDesign name="adduser" size={RFValue(16)} />,
+    icon: (
+      <AntDesign name="adduser" size={RFValue(16)} color={ColorAssets.black} />
+    ),
     name: 'new_single_chat',
     color: '#FBEBA1',
   },
   {
     text: 'New Group Chat',
-    icon: <AntDesign name="addusergroup" size={RFValue(16)} />,
+    icon: (
+      <AntDesign
+        name="addusergroup"
+        size={RFValue(16)}
+        color={ColorAssets.black}
+      />
+    ),
     name: 'new_group_chat',
     color: '#A3FBA1',
   },
