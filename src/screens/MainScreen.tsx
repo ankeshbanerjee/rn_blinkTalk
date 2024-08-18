@@ -59,8 +59,9 @@ const MainScreen: React.FC<Props> = ({navigation}) => {
             tabBarInactiveTintColor: theme.secondaryColor,
             tabBarStyle: {
               // paddingBottom: bottom === 0 ? verticalScale(6) : bottom,
+              paddingBottom: Platform.OS === 'ios' ? 0 : verticalScale(8),
               height:
-                Platform.OS === 'ios' ? verticalScale(70) : verticalScale(46),
+                Platform.OS === 'ios' ? verticalScale(70) : verticalScale(50),
               paddingTop: verticalScale(6),
               backgroundColor: theme.whiteInverse,
               borderTopWidth: 0.5,

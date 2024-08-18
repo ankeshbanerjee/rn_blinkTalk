@@ -21,8 +21,7 @@ const HomeAppBar: React.FC = () => {
           backgroundColor: theme.backgroungColor,
           gap: 8,
           paddingHorizontal: scale(16),
-          paddingTop:
-            top + Platform.OS === 'ios' ? verticalScale(6) : verticalScale(12),
+          paddingTop: Platform.OS === 'ios' ? top : top + verticalScale(12),
           paddingBottom: verticalScale(10),
           shadowColor: ColorAssets.black,
           shadowOffset: {

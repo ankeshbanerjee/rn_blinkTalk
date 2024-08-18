@@ -201,7 +201,7 @@ const ChatScreen: React.FC<Props> = ({navigation, route}) => {
         style={[
           gs.row,
           styles.appBar,
-          {paddingTop: top + Platform.OS === 'ios' ? 0 : verticalScale(12)},
+          {paddingTop: Platform.OS === 'ios' ? top : top + verticalScale(12)},
         ]}>
         <Entypo
           name="chevron-left"
@@ -486,7 +486,7 @@ const ChatScreen: React.FC<Props> = ({navigation, route}) => {
             gs.row,
             {
               paddingBottom:
-                bottom + Platform.OS === 'ios' ? 0 : verticalScale(12),
+                Platform.OS === 'ios' ? bottom : bottom + verticalScale(12),
               paddingHorizontal: scale(16),
               marginTop: verticalScale(4),
             },
