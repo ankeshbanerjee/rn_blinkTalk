@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "141554066415",
+    "project_id": "blinktalk-fcm",
+    "storage_bucket": "blinktalk-fcm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:141554066415:android:f0a8671185ad843e068c1a",
+        "android_client_info": {
+          "package_name": "com.rn_blinktalk"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOpZk95QtTU47COAtfoxaSYkfq3cmyHfM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

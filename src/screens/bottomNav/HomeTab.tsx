@@ -120,7 +120,6 @@ const HomeTab: React.FC<Props> = ({navigation}) => {
     safeApiCall(
       async () => {
         const res = await fetchChats();
-        console.log(res.data.result.chats);
         setChats(res.data.result.chats);
         setUiState('success');
       },
