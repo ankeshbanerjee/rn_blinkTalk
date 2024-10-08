@@ -17,6 +17,20 @@ export interface Chat {
   updatedAt: string;
   __v: number;
   groupAdmin?: User;
+  latestMessage?: {
+    _id: string;
+    sender: {
+      _id: string;
+      name: string;
+      email: string;
+    };
+    content: string;
+    chat: string;
+    readBy: any[];
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  };
 }
 
 export interface User {

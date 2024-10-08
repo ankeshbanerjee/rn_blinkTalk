@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import React, {
   Ref,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -52,6 +53,7 @@ import LoadingModal from '../../components/LoadingModal';
 import {Button, Checkbox} from 'react-native-paper';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import IconTextField2 from '../../components/IconTextField2';
+import {useFocusEffect} from '@react-navigation/native';
 
 type Props = BottomTabScreenProps<BottomNavParamsList, 'HOME'>;
 
@@ -118,6 +120,7 @@ const HomeTab: React.FC<Props> = ({navigation}) => {
     safeApiCall(
       async () => {
         const res = await fetchChats();
+        console.log(res.data.result.chats);
         setChats(res.data.result.chats);
         setUiState('success');
       },
@@ -127,9 +130,11 @@ const HomeTab: React.FC<Props> = ({navigation}) => {
     );
   };
 
-  useEffect(() => {
-    loadChats();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      loadChats();
+    }, []),
+  );
 
   return (
     <View style={styles.container}>

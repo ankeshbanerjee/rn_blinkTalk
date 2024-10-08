@@ -39,6 +39,7 @@ const ChatItem: React.FC<Props> = ({chat, onPress}) => {
           ? chat.chatName
           : chat.users.find(it => it._id !== user?._id)?.name}
       </SimpleText>
+      <SimpleText>{chat.latestMessage?.content}</SimpleText>
     </Pressable>
   );
 };
