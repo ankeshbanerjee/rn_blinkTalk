@@ -1,4 +1,4 @@
-import {StatusBar, View} from 'react-native';
+import {ActivityIndicator, Linking, StatusBar, View} from 'react-native';
 import React, {
   useCallback,
   useContext,
@@ -32,8 +32,68 @@ import {scale, verticalScale} from 'react-native-size-matters';
 import {ImageAssets} from '../../assets';
 import SimpleText from '../components/SimpleText';
 import {RFValue} from 'react-native-responsive-fontsize';
+import notifee from '@notifee/react-native';
 
 const Stack = createNativeStackNavigator<RootStackParamsList>();
+
+// const NAVIGATION_IDS = ['chat'];
+
+// function buildDeepLinkFromNotificationData(data: any): string | null {
+//   const navigationId = data?.navigationId;
+//   console.log('notification data', data);
+//   if (!NAVIGATION_IDS.includes(navigationId)) {
+//     console.warn('Unverified navigationId', navigationId);
+//     return null;
+//   }
+//   const chat = data?.chat;
+//   if (typeof chat === 'string') {
+//     return `myapp://chat/${chat}`;
+//   }
+//   console.warn('Missing chat');
+//   return null;
+// }
+
+// const linking = {
+//   prefixes: ['myapp://'],
+//   config: {
+//     // initialRouteName: 'SPLASH',
+//     screens: {
+//       CHAT: 'chat/:chat',
+//     },
+//   },
+//   async getInitialURL() {
+//     const url = await Linking.getInitialURL();
+//     if (typeof url === 'string') {
+//       return url;
+//     }
+//     //getInitialNotification: When the application is opened from a quit state.
+//     const message = await messaging().getInitialNotification();
+//     console.log('notification message', message);
+//     const deeplinkURL = buildDeepLinkFromNotificationData(message?.data);
+//     if (typeof deeplinkURL === 'string') {
+//       return deeplinkURL;
+//     }
+//   },
+//   subscribe(listener: (url: string) => void) {
+//     const onReceiveURL = ({url}: {url: string}) => listener(url);
+
+//     // Listen to incoming links from deep linking
+//     const linkingSubscription = Linking.addEventListener('url', onReceiveURL);
+
+//     //onNotificationOpenedApp: When the application is running, but in the background.
+//     const unsubscribe = messaging().onNotificationOpenedApp(remoteMessage => {
+//       const url = buildDeepLinkFromNotificationData(remoteMessage?.data);
+//       if (typeof url === 'string') {
+//         listener(url);
+//       }
+//     });
+
+//     return () => {
+//       linkingSubscription.remove();
+//       unsubscribe();
+//     };
+//   },
+// };
 
 const Router = () => {
   const {theme, toggleTheme} = useContext(ThemeContext);
