@@ -35,7 +35,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import IconTextField, {
   IconTextFieldRefProps,
 } from '../components/IconTextField';
-import RippleButton from '../components/ripple_button';
+import RippleButton from '../components/RippleButton';
 import IcSend from '../../assets/svg/IcSend';
 import {safeApiCall} from '../utils/axios_utils';
 import {createMessage, fetchMessages} from '../services/message_services';

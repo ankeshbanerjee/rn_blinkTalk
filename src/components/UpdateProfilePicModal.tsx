@@ -10,7 +10,7 @@ import {safeApiCall} from '../utils/axios_utils';
 import {UserContext} from '../contexts/UserContext';
 import {UiState, showToast} from '../utils/apputils';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import RippleButton from './ripple_button';
+import RippleButton from './RippleButton';
 import ColorAssets from '../theme/colors';
 import {updateProfile} from '../services/user_services';
 import {launchImageLibrary} from 'react-native-image-picker';

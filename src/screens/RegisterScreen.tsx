@@ -29,7 +29,7 @@ import {Button, Modal} from 'react-native-paper';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {UiState, showToast, storeData} from '../utils/apputils';
 import {Constant} from '../utils/constant';
-import RippleButton from '../components/ripple_button';
+import RippleButton from '../components/RippleButton';
 import LoadingModal from '../components/LoadingModal';
 import IconTextField2 from '../components/IconTextField2';
 import {RootStackParamsList} from '../navigation/params';
@@ -154,7 +154,6 @@ const Register: FC<Props> = ({navigation}) => {
               ref={nameRef as Ref<any>}
               securedText={false}
               placeholder="Enter your name"
-              allowSpaces={false}
               inputContainerStyle={{borderColor: '#E3E3E3'}}
             />
             <IconTextField2

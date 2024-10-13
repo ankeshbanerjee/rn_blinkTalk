@@ -25,7 +25,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {gs} from '../../theme/global_styles';
 import Divider from '../../components/Divider';
-import RippleButton from '../../components/ripple_button';
+import RippleButton from '../../components/RippleButton';
 import {
   getData,
   removeData,
@@ -41,7 +41,7 @@ import BottomSheetComponent, {
 import IconTextField2 from '../../components/IconTextField2';
 import {IconTextFieldRefProps} from '../../components/IconTextField';
 import {Button, IconButton} from 'react-native-paper';
-import {updateProfile} from '../../services/user_services';
+import {deleteFCMToken, updateProfile} from '../../services/user_services';
 import LoadingModal from '../../components/LoadingModal';
 import moment from 'moment';
 import UpdateProfilePicModal from '../../components/UpdateProfilePicModal';
@@ -68,11 +68,22 @@ const ProfileTab: React.FC<Props> = ({navigation}) => {
       {
         text: 'OK',
         onPress: () => {
-          safeApiCall(async () => {
-            await removeData(Constant.AUTH_TOKEN);
-            navigation.getParent()?.reset({routes: [{name: 'LOGIN'}]});
-            deleteUser();
-          });
+          safeApiCall(
+            async () => {
+              setUiState('loading');
+              await removeData(Constant.AUTH_TOKEN);
+              const fcmToken = await getData(Constant.FCM_TOKEN);
+              if (fcmToken) {
+                await removeData(Constant.FCM_TOKEN);
+                const res = await deleteFCMToken(fcmToken);
+                console.log(res.data.message);
+              }
+              navigation.getParent()?.reset({routes: [{name: 'LOGIN'}]});
+              deleteUser();
+              setUiState('success');
+            },
+            () => setUiState('failure'),
+          );
         },
       },
     ]);
@@ -123,7 +134,7 @@ const ProfileTab: React.FC<Props> = ({navigation}) => {
             </SimpleText>
           </View>
           <RippleButton
-            style={[gs.row, {}]}
+            style={gs.row}
             onPress={function () {
               bottomSheetRef.current?.present();
             }}>

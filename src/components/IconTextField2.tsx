@@ -20,7 +20,7 @@ import {
 } from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {ThemeContext} from '../contexts/theme_context';
-import RippleButton from './ripple_button';
+import RippleButton from './RippleButton';
 import {ThemeData} from '../theme/theme_data';
 import ColorAssets from '../theme/colors';
 import SimpleText from './SimpleText';

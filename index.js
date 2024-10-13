@@ -23,8 +23,9 @@ import notifee, {AndroidImportance} from '@notifee/react-native';
 async function onBackgroundMessasgeReceived(message) {
   const channelId = await notifee.createChannel({
     id: 'background_notification_channel',
-    name: 'Background Notification Channel',
+    name: 'Message notifications',
     importance: AndroidImportance.HIGH,
+    sound: 'message',
   });
 
   await notifee.displayNotification({
@@ -37,7 +38,7 @@ async function onBackgroundMessasgeReceived(message) {
       smallIcon: 'ic_launcher_foreground',
       // largeIcon: ImageAssets.Logo,
       importance: AndroidImportance.HIGH,
-      sound: 'default',
+      sound: 'message',
       pressAction: {
         id: 'default',
       },
@@ -48,7 +49,7 @@ async function onBackgroundMessasgeReceived(message) {
 async function onForegroundMessageReceived(message) {
   const channelId = await notifee.createChannel({
     id: 'foreground_notification_channel',
-    name: 'Foregroud Notification Channel',
+    name: 'Silent notifications',
     importance: AndroidImportance.LOW,
   });
 

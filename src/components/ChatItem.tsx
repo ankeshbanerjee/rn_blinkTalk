@@ -9,6 +9,7 @@ import {ThemeData} from '../theme/theme_data';
 import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
 import {gs} from '../theme/global_styles';
 import {RFValue} from 'react-native-responsive-fontsize';
+import RippleButton from './RippleButton';
 
 interface Props {
   chat: Chat;
@@ -18,9 +19,13 @@ const ChatItem: React.FC<Props> = ({chat, onPress}) => {
   const {user} = useContext(UserContext);
   const {theme} = useContext(ThemeContext);
   const styles = useMemo(() => getStyles(theme), [theme]);
+  const lastMessageSender =
+    chat.latestMessage?.sender._id === user?._id
+      ? 'You'
+      : chat.latestMessage?.sender.name;
 
   return (
-    <Pressable style={[gs.row, styles.container]} onPress={onPress}>
+    <RippleButton style={{...gs.row, ...styles.container}} onPress={onPress}>
       {chat.isGroupChat ? (
         <Image source={ImageAssets.Group} style={styles.image} />
       ) : (
@@ -31,16 +36,22 @@ const ChatItem: React.FC<Props> = ({chat, onPress}) => {
           style={styles.image}
         />
       )}
-      <SimpleText
-        color={theme.onSecondaryContainer}
-        fontWeight="regular"
-        size={RFValue(14)}>
-        {chat.isGroupChat
-          ? chat.chatName
-          : chat.users.find(it => it._id !== user?._id)?.name}
-      </SimpleText>
-      <SimpleText>{chat.latestMessage?.content}</SimpleText>
-    </Pressable>
+      <View style={{gap: 4, flex: 1}}>
+        <SimpleText
+          color={theme.onSecondaryContainer}
+          fontWeight="medium"
+          size={RFValue(14)}>
+          {chat.isGroupChat
+            ? chat.chatName
+            : chat.users.find(it => it._id !== user?._id)?.name}
+        </SimpleText>
+        {chat.latestMessage && (
+          <SimpleText>
+            {lastMessageSender + ': ' + chat.latestMessage?.content}
+          </SimpleText>
+        )}
+      </View>
+    </RippleButton>
   );
 };
 
