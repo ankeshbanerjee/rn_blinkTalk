@@ -2,6 +2,7 @@ import {
   Image,
   ImageBackground,
   Pressable,
+  RefreshControl,
   SafeAreaView,
   StyleSheet,
   View,
@@ -129,6 +130,20 @@ const HomeTab: React.FC<Props> = ({navigation}) => {
     );
   };
 
+  const reloadChats = () => {
+    setUiState('refreshing');
+    safeApiCall(
+      async () => {
+        const res = await fetchChats();
+        setChats(res.data.result.chats);
+        setUiState('success');
+      },
+      () => {
+        setUiState('failure');
+      },
+    );
+  };
+
   useFocusEffect(
     useCallback(() => {
       loadChats();
@@ -153,6 +168,12 @@ const HomeTab: React.FC<Props> = ({navigation}) => {
                 paddingTop: verticalScale(12),
                 paddingBottom: verticalScale(150),
               }}
+              refreshControl={
+                <RefreshControl
+                  refreshing={uiState === 'refreshing'}
+                  onRefresh={reloadChats}
+                />
+              }
               renderItem={({item, index}) => (
                 <ChatItem
                   chat={item}
