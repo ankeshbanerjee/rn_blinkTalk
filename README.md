@@ -1,79 +1,44 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Description
 
-# Getting Started
+App name - **BlinkTalk**
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+BlinkTalk is a cross-platform Real-time Chat Application which is made using React Native.
 
-## Step 1: Start the Metro Server
+## Features
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+- Supports both One-to-one and Group chats.
+- Real-time push notifications.
+- Real-time typing indicator.
+- Supports file-attachment.
+- Both light and dark mode support.
 
-To start Metro, run the following command from the _root_ of your React Native project:
+## Tech Stack
 
-```bash
-# using npm
-npm start
+- React Native with Typescript.
+- Socket.io-client for handling real-time socket events.
+- Firebase Cloud Messaging (FCM) for real-time push notifications.
+- Notifee for showing and interacting with notifications.
+- Axios to call APIs.
+- ContextAPI for global state-management.
 
-# OR using Yarn
-yarn start
-```
+## Demo
 
-## Step 2: Start your Application
+![](demo/video/demo-video.gif)
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+## Screenshots
 
-### For Android
+| LOGIN                      | HOME TAB                      | PROFILE TAB                  |
+| -------------------------- | ----------------------------- | ---------------------------- |
+| ![](demo/images/Login.png) | ![](demo/images//HomeTab.png) | ![](demo/images/Profile.png) |
 
-```bash
-# using npm
-npm run android
+| HOME TAB (DARK)                   | NOTIFICATION-1                     | NOTIFICATION-2                     |
+| --------------------------------- | ---------------------------------- | ---------------------------------- |
+| ![](demo/images/HomeTab-Dark.png) | ![](demo/images/Notification1.png) | ![](demo/images/Notification2.png) |
 
-# OR using Yarn
-yarn android
-```
+| CHAT CREATION                      | CHAT                      | CHAT (DARK)                    |
+| ---------------------------------- | ------------------------- | ------------------------------ |
+| ![](demo/images/Chat-Creation.png) | ![](demo/images/Chat.png) | ![](demo/images/Chat-Dark.png) |
 
-### For iOS
-
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
-
-## Step 3: Modifying your App
-
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+| FILE ATTACHMENT                        | CHAT WITH ATTACHMENT                   | MEDIA VIEWER                     |
+| -------------------------------------- | -------------------------------------- | -------------------------------- |
+| ![](demo/images/File-Attachment-1.png) | ![](demo/images/File-Attachment-2.png) | ![](demo/images/MediaPlayer.png) |
