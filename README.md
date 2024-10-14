@@ -12,6 +12,10 @@ BlinkTalk is a cross-platform Real-time Chat Application which is made using Rea
 - Supports file-attachment.
 - Both light and dark mode support.
 
+## Demo
+
+![](demo/video/demo-video.gif)
+
 ## Tech Stack
 
 - React Native with Typescript.
@@ -20,10 +24,6 @@ BlinkTalk is a cross-platform Real-time Chat Application which is made using Rea
 - Notifee for showing and interacting with notifications.
 - Axios to call APIs.
 - ContextAPI for global state-management.
-
-## Demo
-
-![](demo/video/demo-video.gif)
 
 ## Screenshots
 
