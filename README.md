@@ -4,7 +4,7 @@ App name - **BlinkTalk**
 
 BlinkTalk is a cross-platform Real-time Chat Application which is made using React Native.
 
-**Download and test the app:** [Click here](https://drive.google.com/file/d/127KDk9AIUrneLPMKNXszdvuAympZnsSF/view?usp=sharing) to get the .apk file and explore its features!
+**Download and test the app:** [Click here](https://drive.google.com/file/d/1wBh2B6W0dkHpJGUq47MdIUccxpLTNJHM/view?usp=sharing) to get the .apk file and explore its features!
 
 ## Features
 
